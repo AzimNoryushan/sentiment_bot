@@ -37,10 +37,9 @@ async def on_message(message):
 async def tweet_topic(ctx, *, topic):
     stamp = random.randint(1000000000,9999999999)
     result = analyze_tweet(stamp,topic)
-    time.sleep(120)
 
-    #await ctx.send(result)
-    await ctx.send(file=discord.File('img/{stamp}.png'.format(stamp=stamp)))
+    await ctx.send(result)
+    #await ctx.send(file=discord.File('img/{stamp}.png'.format(stamp=stamp)))
 
 def analyze_tweet(stamp, topic):
     positive_results = 0
@@ -130,7 +129,8 @@ def getTweets(topic):
 
         return tweets
 
-    except:
+    except Exception as e:
+        print(e)
         traceback.print_exc
 
 def listToString(list):
