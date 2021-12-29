@@ -1,6 +1,7 @@
 # sentiment_bot
 
 ADD .env file with this keys
+
 TOKEN = <DISCORD_BOT_TOKEN>
 
 consumer_key = <TWITTER_CONSUMER_KEY>
