@@ -7,6 +7,7 @@ import os
 import traceback
 
 from datetime import date
+import time
 import malaya
 import tweepy
 import random
@@ -36,10 +37,10 @@ async def on_message(message):
 async def tweet_topic(ctx, *, topic):
     stamp = random.randint(1000000000,9999999999)
     result = analyze_tweet(stamp,topic)
-    #generate_chart(result, topic,stamp)
+    time.sleep(120)
 
-    await ctx.send(result)
-    #await ctx.send(file=discord.File('img/{stamp}.png'.format(stamp=stamp)))
+    #await ctx.send(result)
+    await ctx.send(file=discord.File('img/{stamp}.png'.format(stamp=stamp)))
 
 def analyze_tweet(stamp, topic):
     positive_results = 0
@@ -62,7 +63,7 @@ def analyze_tweet(stamp, topic):
         except Exception as e:
             traceback.print_exc
 
-    #generate_chart(positive_results, negative_results, stamp, topic)
+    generate_chart(positive_results, negative_results, stamp, topic)
 
     return { "positive": positive_results, "negative": negative_results }
 
@@ -102,37 +103,35 @@ def generate_chart(positive_results, negative_results, stamp, topic):
         print(e)
 
 def getTweets(topic):
-        try:
-            load_dotenv()
+    try:
+        consumer_key = os.getenv('consumer_key')
+        consumer_secret = os.getenv('consumer_secret')
 
-            consumer_key = os.getenv('consumer_key')
-            consumer_secret = os.getenv('consumer_secret')
+        access_token = os.getenv('access_token')
+        access_token_secret = os.getenv('access_token_secret')
 
-            access_token = os.getenv('access_token')
-            access_token_secret = os.getenv('access_token_secret')
+        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+        auth.set_access_token(access_token, access_token_secret)
 
-            auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-            auth.set_access_token(access_token, access_token_secret)
+        api = tweepy.API(auth, wait_on_rate_limit=True)
 
-            api = tweepy.API(auth, wait_on_rate_limit=True)
+        count = 0
+        max_count = 1000
+        topic = topic
+        geocode = '3.10559,101.6427,300km'
+        tweets = []
 
-            count = 0
-            max_count = 1000
-            topic = topic
-            geocode = '3.10559,101.6427,300km'
-            tweets = []
+        for tweet in tweepy.Cursor(api.search_tweets, q=topic, geocode=geocode, count=100).items():
+            tweets.append(tweet.text)
+            count += 1
 
-            for tweet in tweepy.Cursor(api.search_tweets, q=topic, geocode=geocode, count=100).items():
-                tweets.append(tweet.text)
-                count += 1
+            if count >= max_count:
+                break
 
-                if count >= max_count:
-                    break
+        return tweets
 
-            return tweets
-
-        except:
-            traceback.print_exc
+    except:
+        traceback.print_exc
 
 def listToString(list):
     try:
