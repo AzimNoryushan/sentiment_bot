@@ -38,8 +38,8 @@ async def tweet_topic(ctx, *, topic):
     stamp = random.randint(1000000000,9999999999)
     result = analyze_tweet(stamp,topic)
 
-    await ctx.send(result)
-    #await ctx.send(file=discord.File('img/{stamp}.png'.format(stamp=stamp)))
+    #await ctx.send(result)
+    await ctx.send(file=discord.File('img/{stamp}.png'.format(stamp=stamp)))
 
 def analyze_tweet(stamp, topic):
     positive_results = 0
