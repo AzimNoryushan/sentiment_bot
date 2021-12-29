@@ -11,7 +11,6 @@ import malaya
 import tweepy
 import random
 import matplotlib.pyplot as plt
-from datetime import date
 
 load_dotenv()
 
