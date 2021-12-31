@@ -11,7 +11,7 @@ import malaya
 import tweepy
 import random
 import matplotlib.pyplot as plt
-from discord_sentry_reporting import use_sentry
+import sentry_sdk
 
 load_dotenv()
 
@@ -26,9 +26,8 @@ stamp = ""
 
 bot = commands.Bot(command_prefix='#', description='Apakatatwitter', intents=intents)
 
-use_sentry(
-    bot,
-    dsn="https://7bc15c66cedf4d91abcb76043c7ba88e@o1102874.ingest.sentry.io/6129419",
+sentry_sdk.init(
+    "https://7bc15c66cedf4d91abcb76043c7ba88e@o1102874.ingest.sentry.io/6129419",
     traces_sample_rate=1.0
 )
 
@@ -49,6 +48,10 @@ async def tweet_topic(ctx, *, topic):
 
     #await ctx.send(result)
     await ctx.send(file=discord.File('img/{stamp}.png'.format(stamp=stamp)))
+
+@bot.event()
+async def on_error(event, *args, **kwargs):
+    raise
 
 def analyze_tweet(stamp, topic):
     positive_results = 0
