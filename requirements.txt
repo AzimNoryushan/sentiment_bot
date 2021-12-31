@@ -6,3 +6,4 @@ python-dotenv
 tweepy
 matplotlib
 sentry-sdk
+discord-sentry-reporting
