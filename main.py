@@ -45,7 +45,7 @@ async def on_message(message):
 async def tweet_topic(ctx, *, topic):
     stamp = random.randint(1000000000,9999999999)
     result = analyze_tweet(stamp,topic)
-    division_by_zero = 1 / 0
+    #division_by_zero = 1 / 0
 
     #await ctx.send(result)
     await ctx.send(file=discord.File('img/{stamp}.png'.format(stamp=stamp)))
