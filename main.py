@@ -49,7 +49,7 @@ async def tweet_topic(ctx, *, topic):
     #await ctx.send(result)
     await ctx.send(file=discord.File('img/{stamp}.png'.format(stamp=stamp)))
 
-@bot.event()
+@bot.event
 async def on_error(event, *args, **kwargs):
     raise
 
