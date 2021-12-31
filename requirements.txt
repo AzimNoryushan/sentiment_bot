@@ -5,3 +5,4 @@ malaya
 python-dotenv
 tweepy
 matplotlib
+sentry-sdk

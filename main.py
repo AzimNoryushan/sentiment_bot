@@ -3,15 +3,24 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 from topic_sentiment import Topic_sentiment
+from datetime import date
 import os
 import traceback
-
-from datetime import date
 import time
 import malaya
 import tweepy
 import random
 import matplotlib.pyplot as plt
+import sentry_sdk
+
+sentry_sdk.init(
+    "https://7bc15c66cedf4d91abcb76043c7ba88e@o1102874.ingest.sentry.io/6129419",
+
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0
+)
 
 load_dotenv()
 
@@ -39,7 +48,8 @@ async def tweet_topic(ctx, *, topic):
     result = analyze_tweet(stamp,topic)
 
     #await ctx.send(result)
-    await ctx.send(file=discord.File('img/{stamp}.png'.format(stamp=stamp)))
+    #await ctx.send(file=discord.File('img/{stamp}.png'.format(stamp=stamp)))
+    await ctx.send(1 / 0)
 
 def analyze_tweet(stamp, topic):
     positive_results = 0
