@@ -11,18 +11,11 @@ import malaya
 import tweepy
 import random
 import matplotlib.pyplot as plt
-import sentry_sdk
-
-sentry_sdk.init(
-    "https://7bc15c66cedf4d91abcb76043c7ba88e@o1102874.ingest.sentry.io/6129419",
-
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for performance monitoring.
-    # We recommend adjusting this value in production.
-    traces_sample_rate=1.0
-)
+from discord_sentry_reporting import use_sentry
 
 load_dotenv()
+
+model = malaya.sentiment.multinomial()
 
 #ApaKataTwitter
 TOKEN = os.getenv('TOKEN')
@@ -32,6 +25,12 @@ intents.members = True
 stamp = ""
 
 bot = commands.Bot(command_prefix='#', description='Apakatatwitter', intents=intents)
+
+use_sentry(
+    bot,
+    dsn="https://7bc15c66cedf4d91abcb76043c7ba88e@o1102874.ingest.sentry.io/6129419",
+    traces_sample_rate=1.0
+)
 
 @bot.event
 async def on_ready():
@@ -46,10 +45,10 @@ async def on_message(message):
 async def tweet_topic(ctx, *, topic):
     stamp = random.randint(1000000000,9999999999)
     result = analyze_tweet(stamp,topic)
+    division_by_zero = 1 / 0
 
     #await ctx.send(result)
-    #await ctx.send(file=discord.File('img/{stamp}.png'.format(stamp=stamp)))
-    await ctx.send(1 / 0)
+    await ctx.send(file=discord.File('img/{stamp}.png'.format(stamp=stamp)))
 
 def analyze_tweet(stamp, topic):
     positive_results = 0
@@ -78,7 +77,6 @@ def analyze_tweet(stamp, topic):
 
 def getSentiment(message):
     try:
-        model = malaya.sentiment.multinomial()
         sentiment = model.predict(message, add_neutral = False)
         message = ' '.join(message)
 
